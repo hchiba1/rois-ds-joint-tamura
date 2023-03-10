@@ -1,0 +1,21 @@
+PREFIX orthodb: <http://purl.orthodb.org/>
+PREFIX upTax: <http://purl.uniprot.org/taxonomy/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+
+SELECT DISTINCT ?entrez_id1 ?entrez_id2
+WHERE {
+  ?group orthodb:ogBuiltAt upTax:71240 . # eudicotyledons
+  ?group orthodb:hasMember ?member1 , ?member2 .
+  ?member1 rdfs:seeAlso ?member_entrez1 ;
+      up:organism ?odb_organism1 .
+  ?member2 rdfs:seeAlso ?member_entrez2 ;
+      up:organism ?odb_organism2 .
+  ?odb_organism1 obo:RO_0002162 upTax:3702 . # Arabidopsis
+  ?odb_organism2 obo:RO_0002162 upTax:3847 . # soybean
+  ?member_entrez1 a orthodb:Entrezgene ;
+      rdfs:label ?entrez_id1 .
+  ?member_entrez2 a orthodb:Entrezgene ;
+      rdfs:label ?entrez_id2 .
+}
