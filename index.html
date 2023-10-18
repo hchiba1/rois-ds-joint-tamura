@@ -3,27 +3,29 @@
     <head>
         <meta charset='utf-8'>
         <title>Plant orthology metasearch</title>
-    <style>
-       table {
-         border-collapse: collapse;
-       }
-    </style>
+        <style>
+         body {
+             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+             line-height: 1.5;
+         }
+         table {
+             border-collapse: collapse;
+         }
+        </style>
     </head>
     <body>
-        <h1>Plant orthology metasearch</h1>
-        <p>Search for orthologous genes in plants</p>
-
         <div id="results"><div>
 
-    <script>
-        async function init() {
-          const results = document.getElementById('results');
-          const data = await fetch('https://orth.dbcls.jp/cgi-bin/plant-api/815275');
-          results.innerHTML = await data.text();
-          
-        }
-        init();
-    </script>
+            <script>
+             async function init() {
+                 const params = new URLSearchParams(window.location.search);
+                 const ncbigene = params.get('ncbigene') || '815275';
+                 const results = document.getElementById('results');
+                 const data = await fetch(`https://orth.dbcls.jp/cgi-bin/plant-api/${ncbigene}`);
+                 results.innerHTML = await data.text();
+             }
+             init();
+            </script>
     </body>
 </html>
 
