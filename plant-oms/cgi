@@ -12,6 +12,7 @@ print "</head>\n";
 print "<body>\n";
 
 my $DIR = "/home/chiba/share/orth/plant";
+my $SPARQL_DIR = "/home/chiba/share/github/hchiba1/rois-ds-joint-tamura/plant-oms/sparql";
 
 my $GENE = $ENV{PATH_INFO};
 if ($GENE =~ /^\/(\S+)$/) {
@@ -110,9 +111,9 @@ if (%SAVED_REFSEQ) {
     print "Viridiplantae (green plants)\n";
     my $sparql_oma_33090 = "";
     if ($ORGANISM1 eq "Arabidopsis thaliana") {
-        $sparql_oma_33090 = "$DIR/sparql/oma_33090.rq";
+        $sparql_oma_33090 = "$SPARQL_DIR/oma.rq 33090";
     } elsif ($ORGANISM1 eq "Glycine max") {
-        $sparql_oma_33090 = "$DIR/sparql/oma2_33090.rq";
+        $sparql_oma_33090 = "$SPARQL_DIR/oma2.rq 33090";
     }
     my @oma_result = `echo "$param" | $sparql_oma_33090`;
     chomp(@oma_result);
@@ -136,9 +137,9 @@ if (%SAVED_REFSEQ) {
     print "<br>Embryophyta (land plants)\n";
     my $sparql_oma_3193 = "";
     if ($ORGANISM1 eq "Arabidopsis thaliana") {
-        $sparql_oma_3193 = "$DIR/sparql/oma_3193.rq";
+        $sparql_oma_3193 = "$SPARQL_DIR/oma.rq 3193";
     } elsif ($ORGANISM1 eq "Glycine max") {
-        $sparql_oma_3193 = "$DIR/sparql/oma2_3193.rq";
+        $sparql_oma_3193 = "$SPARQL_DIR/oma2.rq 3193";
     }
     my @oma_result2 = `echo "$param" | $sparql_oma_3193`;
     chomp(@oma_result2);
@@ -163,9 +164,9 @@ if (%SAVED_REFSEQ) {
     print "Viridiplantae (green plants)\n";
     my $sparql_orthodb_33090 = "";
     if ($ORGANISM1 eq "Arabidopsis thaliana") {
-        $sparql_orthodb_33090 = "$DIR/sparql/orthodb_33090.rq";
+        $sparql_orthodb_33090 = "$SPARQL_DIR/orthodb.rq 33090";
     } elsif ($ORGANISM1 eq "Glycine max") {
-        $sparql_orthodb_33090 = "$DIR/sparql/orthodb2_33090.rq";
+        $sparql_orthodb_33090 = "$SPARQL_DIR/orthodb2.rq 33090";
     }
     my @orthodb_result = `$sparql_orthodb_33090 $GENE`;
     if (@orthodb_result) {
@@ -193,9 +194,9 @@ if (%SAVED_REFSEQ) {
     print "<br>Embryophyta (land plants)\n";
     my $sparql_orthodb_3193 = "";
     if ($ORGANISM1 eq "Arabidopsis thaliana") {
-        $sparql_orthodb_3193 = "$DIR/sparql/orthodb_3193.rq";
+        $sparql_orthodb_3193 = "$SPARQL_DIR/orthodb.rq 3193";
     } elsif ($ORGANISM1 eq "Glycine max") {
-        $sparql_orthodb_3193 = "$DIR/sparql/orthodb2_3193.rq";
+        $sparql_orthodb_3193 = "$SPARQL_DIR/orthodb2.rq 3193";
     }
     my @orthodb_result = `$sparql_orthodb_3193 $GENE`;
     if (@orthodb_result) {
