@@ -107,61 +107,25 @@ if (%SAVED_REFSEQ) {
         $key =~ s/.\d+$//;
         $param .= "'$key'\n";
     }
-    print "<h3>OMA Results</h3>";
-    print "Viridiplantae (green plants)\n";
+
     my $sparql_oma = "";
-    if ($ORGANISM1 eq "Arabidopsis thaliana") {
-        $sparql_oma = "$SPARQL_DIR/oma.rq";
-    } elsif ($ORGANISM1 eq "Glycine max") {
-        $sparql_oma = "$SPARQL_DIR/oma2.rq";
-    }
-    my @oma_result = `echo "$param" | $sparql_oma 33090`;
-    chomp(@oma_result);
-    if (@oma_result) {
-        print "<table border='1' style='font-size: 0.9em'>\n";
-        print "<thead>\n";
-        print "<td>Organism</td>\n";
-        print "<td>Locus tag</td>\n";
-        print "<td>Gene ID</td>\n";
-        print "</thead>\n";
-        for my $oma_result (@oma_result) {
-            $oma_result =~ s/"//g;
-            print "<tr>\n";
-            print "<td>$ORGANISM2</td>\n";
-            print "<td>$GENE_INFO{$oma_result}{locus_tag}</td>\n";
-            print "<td>$oma_result</td>\n";
-            print "</tr>\n";
-        }
-        print "</table>\n";
-    }
-    print "<br>Embryophyta (land plants)\n";
-    my @oma_result2 = `echo "$param" | $sparql_oma 3193`;
-    chomp(@oma_result2);
-    if (@oma_result2) {
-        print "<table border='1' style='font-size: 0.9em'>\n";
-        print "<thead>\n";
-        print "<td>Organism</td>\n";
-        print "<td>Locus tag</td>\n";
-        print "<td>Gene ID</td>\n";
-        print "</thead>\n";
-        for my $oma_result (@oma_result2) {
-            $oma_result =~ s/"//g;
-            print "<tr>\n";
-            print "<td>$ORGANISM2</td>\n";
-            print "<td>$GENE_INFO{$oma_result}{locus_tag}</td>\n";
-            print "<td>$oma_result</td>\n";
-            print "</tr>\n";
-        }
-        print "</table>\n";
-    }
-    print "<h3>OrthoDB Results</h3>";
-    print "Viridiplantae (green plants)\n";
     my $sparql_orthodb = "";
     if ($ORGANISM1 eq "Arabidopsis thaliana") {
+        $sparql_oma = "$SPARQL_DIR/oma.rq";
         $sparql_orthodb = "$SPARQL_DIR/orthodb.rq";
     } elsif ($ORGANISM1 eq "Glycine max") {
+        $sparql_oma = "$SPARQL_DIR/oma2.rq";
         $sparql_orthodb = "$SPARQL_DIR/orthodb2.rq";
     }
+
+    print "<h3>OMA Results</h3>";
+    print "Viridiplantae (green plants)\n";
+    print_oma_results(`echo "$param" | $sparql_oma 33090`);
+    print "<br>Embryophyta (land plants)\n";
+    print_oma_results(`echo "$param" | $sparql_oma 3193`);
+
+    print "<h3>OrthoDB Results</h3>";
+    print "Viridiplantae (green plants)\n";
     print_orthodb_results("$sparql_orthodb 33090 $GENE");
     print "<br>Embryophyta (land plants)\n";
     print_orthodb_results("$sparql_orthodb 3193 $GENE");
@@ -373,6 +337,33 @@ sub read_gene2refseq {
     $out .= "</table>\n";
 
     return @refseq;
+}
+
+sub print_oma_results {
+    my @oma_result = @_;
+
+    chomp(@oma_result);
+    if (@oma_result) {
+        print "<table border='1' style='font-size: 0.9em'>\n";
+        print "<thead>\n";
+        print "<td>Organism</td>\n";
+        print "<td>Locus tag</td>\n";
+        print "<td>Gene ID</td>\n";
+        print "</thead>\n";
+        my %hash;
+        for my $oma_result (@oma_result) {
+            $oma_result =~ s/"//g;
+            my $locus_tag = $GENE_INFO{$oma_result}{locus_tag};
+            my $line = "<tr>";
+            $line .= "<td>$ORGANISM2</td>";
+            $line .= "<td>$locus_tag</td>";
+            $line .= "<td>$oma_result</td>";
+            $line .= "</tr>";
+            $hash{$locus_tag} = $line;
+        }
+        print_sorted(\%hash);
+        print "</table>\n";
+    }
 }
 
 sub print_orthodb_results {
