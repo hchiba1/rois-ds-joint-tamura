@@ -6,7 +6,7 @@ print "<!DOCTYPE html>\n";
 print "<html>\n";
 print "<head>\n";
 print "<meta charset='utf-8'>\n";
-print "<title>Gene info</title>\n";
+print "<title>Plant Orthology Meta-search</title>\n";
 print "<link href='/cgi/css/style.css' rel='stylesheet'>\n";
 print "</head>\n";
 print "<body>\n";
