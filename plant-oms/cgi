@@ -45,7 +45,7 @@ if ($GENE =~ /^(\d+)$/) {
     }
     print "<h3>Query</h3>";
     print "<table border='1' style='font-size: 0.9em'>\n";
-    print "<thead align='left'>\n";
+    print "<thead>\n";
     print "<td>Organism</td>\n";
     print "<td>LocusTag</td>\n";
     print "<td>Symbol</td>\n";
@@ -74,7 +74,7 @@ if ($GENE =~ /^(\d+)$/) {
         my @line = split(/\n/, $ensembl_result);
         print "<h3>Ensembl Results</h3>";
         print "<table border='1' style='font-size: 0.9em'>\n";
-        print "<thead align='left'>\n";
+        print "<thead>\n";
         print "<td>Organism</td>\n";
         print "<td>Gene ID</td>\n";
         print "<td>Protein ID</td>\n";
@@ -119,7 +119,7 @@ if (%SAVED_REFSEQ) {
     chomp(@oma_result);
     if (@oma_result) {
         print "<table border='1' style='font-size: 0.9em'>\n";
-        print "<thead align='left'>\n";
+        print "<thead>\n";
         print "<td>Organism</td>\n";
         print "<td>Locus tag</td>\n";
         print "<td>Gene ID</td>\n";
@@ -139,7 +139,7 @@ if (%SAVED_REFSEQ) {
     chomp(@oma_result2);
     if (@oma_result2) {
         print "<table border='1' style='font-size: 0.9em'>\n";
-        print "<thead align='left'>\n";
+        print "<thead>\n";
         print "<td>Organism</td>\n";
         print "<td>Locus tag</td>\n";
         print "<td>Gene ID</td>\n";
@@ -281,7 +281,7 @@ sub print_orthofinder_results {
     }
     close(ORTHOGROUPS);
     print "<table border='1' style='font-size: 0.9em'>\n";
-    print "<thead align='left'>\n";
+    print "<thead>\n";
     print "<td>Organism</td>\n";
     print "<td>LocusTag</td>\n";
     print "<td>RefSeq ID</td>\n";
@@ -350,7 +350,7 @@ sub read_gene2refseq {
 
     my @refseq = ();
     my $out = "<table border='1' style='font-size: 0.9em'>\n";
-    $out .= "<thead align='left'>\n";
+    $out .= "<thead>\n";
     $out .= "<tr style='color: navy'>\n";
     $out .= "<td>Status</td>";
     $out .= "<td>RefSeq protein ID</td>";
@@ -381,7 +381,7 @@ sub print_orthodb_results {
     my @orthodb_result = `$command_line`;
     if (@orthodb_result) {
         print "<table border='1' style='font-size: 0.9em'>\n";
-        print "<thead align='left'>\n";
+        print "<thead>\n";
         print "<td>Organism</td>\n";
         print "<td>Locus tag</td>\n";
         print "<td>Gene ID</td>\n";
