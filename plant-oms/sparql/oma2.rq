@@ -1,0 +1,22 @@
+#!/home/chiba/.npm-global/bin/spang2
+# @endpoint https://sparql.omabrowser.org/sparql/
+# @param taxid=3193
+# 33090: Viridiplantae (green plants)
+# 3193: Embryophyta (land plants)
+# @input ("XP_003516849")
+
+PREFIX oo: <http://purl.org/net/orth#>
+PREFIX upTax: <http://purl.uniprot.org/taxonomy/>
+
+SELECT DISTINCT ?id
+WHERE {
+  ?group oo:hasHomologousMember+ ?member1 , ?member2 .
+  ?group oo:hasTaxonomicRange upTax:${taxid} .
+  ?member1 a oo:Protein .
+  ?member2 a oo:Protein .
+  ?member1 oo:organism <https://omabrowser.org/oma/genome/3702> .
+  ?member2 oo:organism <https://omabrowser.org/oma/genome/3847> .
+  ?member2 lscr:xrefNCBIRefSeq/dct:identifier ?protein .
+  VALUES (?protein) { ${INPUT} }
+  ?member1 sio:SIO_010079/lscr:xrefNCBIGene/dct:identifier ?id .
+}
