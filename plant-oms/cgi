@@ -109,13 +109,13 @@ if (%SAVED_REFSEQ) {
     }
     print "<h3>OMA Results</h3>";
     print "Viridiplantae (green plants)\n";
-    my $sparql_oma_33090 = "";
+    my $sparql_oma = "";
     if ($ORGANISM1 eq "Arabidopsis thaliana") {
-        $sparql_oma_33090 = "$SPARQL_DIR/oma.rq 33090";
+        $sparql_oma = "$SPARQL_DIR/oma.rq";
     } elsif ($ORGANISM1 eq "Glycine max") {
-        $sparql_oma_33090 = "$SPARQL_DIR/oma2.rq 33090";
+        $sparql_oma = "$SPARQL_DIR/oma2.rq";
     }
-    my @oma_result = `echo "$param" | $sparql_oma_33090`;
+    my @oma_result = `echo "$param" | $sparql_oma 33090`;
     chomp(@oma_result);
     if (@oma_result) {
         print "<table border='1' style='font-size: 0.9em'>\n";
@@ -135,13 +135,7 @@ if (%SAVED_REFSEQ) {
         print "</table>\n";
     }
     print "<br>Embryophyta (land plants)\n";
-    my $sparql_oma_3193 = "";
-    if ($ORGANISM1 eq "Arabidopsis thaliana") {
-        $sparql_oma_3193 = "$SPARQL_DIR/oma.rq 3193";
-    } elsif ($ORGANISM1 eq "Glycine max") {
-        $sparql_oma_3193 = "$SPARQL_DIR/oma2.rq 3193";
-    }
-    my @oma_result2 = `echo "$param" | $sparql_oma_3193`;
+    my @oma_result2 = `echo "$param" | $sparql_oma 3193`;
     chomp(@oma_result2);
     if (@oma_result2) {
         print "<table border='1' style='font-size: 0.9em'>\n";
