@@ -162,53 +162,9 @@ if (%SAVED_REFSEQ) {
     } elsif ($ORGANISM1 eq "Glycine max") {
         $sparql_orthodb = "$SPARQL_DIR/orthodb2.rq";
     }
-    my @orthodb_result = `$sparql_orthodb 33090 $GENE`;
-    if (@orthodb_result) {
-        print "<table border='1' style='font-size: 0.9em'>\n";
-        print "<thead align='left' bgcolor='#e9faf9'>\n";
-        print "<td>Organism</td>\n";
-        print "<td>Locus tag</td>\n";
-        print "<td>Gene ID</td>\n";
-        print "<td>Symbol</td>\n";
-        print "<td>Description</td>\n";
-        print "</thead>\n";
-        for my $orthodb_result (@orthodb_result) {
-            $orthodb_result =~ s/"//g;
-            my @f = split(/\t/, $orthodb_result);
-            print "<tr>\n";
-            print "<td>$ORGANISM2</td>\n";
-            print "<td>$GENE_INFO{$f[1]}{locus_tag}</td></td>\n";
-            print "<td>$f[1]</td>\n";
-            print "<td>$f[0]</td>\n";
-            print "<td>$f[2]</td>\n";
-            print "</tr>\n";
-        }
-        print "</table>\n";
-    }
+    print_orthodb_results("$sparql_orthodb 33090 $GENE");
     print "<br>Embryophyta (land plants)\n";
-    my @orthodb_result = `$sparql_orthodb 3193 $GENE`;
-    if (@orthodb_result) {
-        print "<table border='1' style='font-size: 0.9em'>\n";
-        print "<thead align='left' bgcolor='#e9faf9'>\n";
-        print "<td>Organism</td>\n";
-        print "<td>Locus tag</td>\n";
-        print "<td>Gene ID</td>\n";
-        print "<td>Symbol</td>\n";
-        print "<td>Description</td>\n";
-        print "</thead>\n";
-        for my $orthodb_result (@orthodb_result) {
-            $orthodb_result =~ s/"//g;
-            my @f = split(/\t/, $orthodb_result);
-            print "<tr>\n";
-            print "<td>$ORGANISM2</td>\n";
-            print "<td>$GENE_INFO{$f[1]}{locus_tag}</td></td>\n";
-            print "<td>$f[1]</td>\n";
-            print "<td>$f[0]</td>\n";
-            print "<td>$f[2]</td>\n";
-            print "</tr>\n";
-        }
-        print "</table>\n";
-    }
+    print_orthodb_results("$sparql_orthodb 3193 $GENE");
     print "<br>\n";
 }
 
@@ -417,4 +373,45 @@ sub read_gene2refseq {
     $out .= "</table>\n";
 
     return @refseq;
+}
+
+sub print_orthodb_results {
+    my ($command_line) = @_;
+
+    my @orthodb_result = `$command_line`;
+    if (@orthodb_result) {
+        print "<table border='1' style='font-size: 0.9em'>\n";
+        print "<thead align='left' bgcolor='#e9faf9'>\n";
+        print "<td>Organism</td>\n";
+        print "<td>Locus tag</td>\n";
+        print "<td>Gene ID</td>\n";
+        print "<td>Symbol</td>\n";
+        print "<td>Description</td>\n";
+        print "</thead>\n";
+        my %hash;
+        for my $orthodb_result (@orthodb_result) {
+            $orthodb_result =~ s/"//g;
+            my @f = split(/\t/, $orthodb_result);
+            my $locus_tag = $GENE_INFO{$f[1]}{locus_tag};
+            my $line = "<tr>";
+            $line .= "<td>$ORGANISM2</td>";
+            $line .= "<td>$locus_tag</td></td>";
+            $line .= "<td>$f[1]</td>";
+            $line .= "<td>$f[0]</td>";
+            $line .= "<td>$f[2]</td>";
+            $line .= "</tr>";
+            $hash{$locus_tag} = $line;
+        }
+        print_sorted(\%hash);
+        print "</table>\n";
+    }
+}
+
+sub print_sorted {
+    my ($r_hash) = @_;
+
+    my @sorted_keys = sort {$a cmp $b} keys %{$r_hash};
+    for my $key (@sorted_keys) {
+        print "${$r_hash}{$key}\n";
+    }
 }
