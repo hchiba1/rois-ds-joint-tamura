@@ -30,75 +30,29 @@ my %SAVED_REFSEQ = ();
 my $ORGANISM1 = "";
 my $ORGANISM2 = "";
 if ($GENE =~ /^(\d+)$/) {
-    my @refseq = ();
     my @refseq1 = read_gene2refseq("$DIR/ncbi/3702_gene2refseq.tsv", $GENE);
+    my @refseq2 = read_gene2refseq("$DIR/ncbi/3847_gene2refseq.tsv", $GENE);
+
+    print "<h3>Query</h3>";
     if (@refseq1) {
-        @refseq = @refseq1;
+        print_query(@refseq1);
         $ORGANISM1 = "Arabidopsis thaliana";
         $ORGANISM2 = "Glycine max";
     }
-    my @refseq2 = read_gene2refseq("$DIR/ncbi/3847_gene2refseq.tsv", $GENE);
     if (@refseq2) {
-        @refseq = @refseq2;
+        print_query(@refseq2);
         $ORGANISM1 = "Glycine max";
         $ORGANISM2 = "Arabidopsis thaliana";
     }
-    print "<h3>Query</h3>";
-    print "<table border='1' style='font-size: 0.9em'>\n";
-    print "<thead>\n";
-    print "<td>Organism</td>\n";
-    print "<td>LocusTag</td>\n";
-    print "<td>Symbol</td>\n";
-    print "<td>Gene ID</td>\n";
-    print "<td>RefSeq IDs</td>\n";
-    print "<td>Description</td>\n";
-    print "</thead>\n";
-    print "<tr>\n";
-    print "<td>$ORGANISM1</td>\n";
-    print "<td>$GENE_INFO{$GENE}{locus_tag}</td>\n";
-    print "<td>$GENE_INFO{$GENE}{symbol}</td>\n";
-    print "<td>$GENE</td>\n";
-    print "<td>@refseq</td>\n";
-    print "<td>$GENE_INFO{$GENE}{descr}</td>\n";
-    print "</tr>\n";
-    print "</table>\n";
-    @refseq = (@refseq1, @refseq2);
 
+    print "<h3>OrthoFinder Results</h3>";
+    my @refseq = (@refseq1, @refseq2);
     if (@refseq) {
-        print "<h3>OrthoFinder Results</h3>";
         print_orthofinder_results();
     }
 
-    my $ensembl_result = get_ensembl($GENE_INFO{$GENE}{locus_tag});
-    if ($ensembl_result) {
-        my @line = split(/\n/, $ensembl_result);
-        print "<h3>Ensembl Results</h3>";
-        print "<table border='1' style='font-size: 0.9em'>\n";
-        print "<thead>\n";
-        print "<td>Organism</td>\n";
-        print "<td>Gene ID</td>\n";
-        print "<td>Protein ID</td>\n";
-        print "<td>identity</td>\n";
-        print "<td>homology_identity</td>\n";
-        print "<td>wga_coverage</td>\n";
-        print "<td>homology_type</td>\n";
-        print "<td>is_high_confidence</td>\n";
-        print "</thead>\n";
-        for my $line (@line) {
-            my @f = split(/\t/, $line);
-            print "<tr>\n";
-            print "<td>$ORGANISM2</td>\n";
-            print "<td>$f[0]</td>\n";
-            print "<td>$f[1]</td>\n";
-            print "<td>$f[2]</td>\n";
-            print "<td>$f[3]</td>\n";
-            print "<td>$f[4]</td>\n";
-            print "<td>$f[5]</td>\n";
-            print "<td>$f[6]</td>\n";
-            print "</tr>\n";
-        }
-        print "</table>\n";
-    }
+    print "<h3>Ensembl Results</h3>";
+    print_ensembl_results($GENE);
 }
 
 if (%SAVED_REFSEQ) {
@@ -139,6 +93,29 @@ print "</html>\n";
 ### Function ###################################################################
 ################################################################################
 
+sub print_query {
+    my @refseq = @_;
+
+    print "<table border='1' style='font-size: 0.9em'>\n";
+    print "<thead>\n";
+    print "<td>Organism</td>\n";
+    print "<td>LocusTag</td>\n";
+    print "<td>Symbol</td>\n";
+    print "<td>Gene ID</td>\n";
+    print "<td>RefSeq IDs</td>\n";
+    print "<td>Description</td>\n";
+    print "</thead>\n";
+    print "<tr>\n";
+    print "<td>$ORGANISM1</td>\n";
+    print "<td>$GENE_INFO{$GENE}{locus_tag}</td>\n";
+    print "<td>$GENE_INFO{$GENE}{symbol}</td>\n";
+    print "<td>$GENE</td>\n";
+    print "<td>@refseq</td>\n";
+    print "<td>$GENE_INFO{$GENE}{descr}</td>\n";
+    print "</tr>\n";
+    print "</table>\n";
+}
+
 sub get_ensembl {
     my ($locust_tag) = @_;
 
@@ -171,6 +148,40 @@ sub get_ensembl {
     close(FILE);
 
     return $out;
+}
+
+sub print_ensembl_results {
+    my ($gene) = @_;
+
+    my $ensembl_result = get_ensembl($GENE_INFO{$gene}{locus_tag});
+    if ($ensembl_result) {
+        my @line = split(/\n/, $ensembl_result);
+        print "<table border='1' style='font-size: 0.9em'>\n";
+        print "<thead>\n";
+        print "<td>Organism</td>\n";
+        print "<td>Gene ID</td>\n";
+        print "<td>Protein ID</td>\n";
+        print "<td>identity</td>\n";
+        print "<td>homology_identity</td>\n";
+        print "<td>wga_coverage</td>\n";
+        print "<td>homology_type</td>\n";
+        print "<td>is_high_confidence</td>\n";
+        print "</thead>\n";
+        for my $line (@line) {
+            my @f = split(/\t/, $line);
+            print "<tr>\n";
+            print "<td>$ORGANISM2</td>\n";
+            print "<td>$f[0]</td>\n";
+            print "<td>$f[1]</td>\n";
+            print "<td>$f[2]</td>\n";
+            print "<td>$f[3]</td>\n";
+            print "<td>$f[4]</td>\n";
+            print "<td>$f[5]</td>\n";
+            print "<td>$f[6]</td>\n";
+            print "</tr>\n";
+        }
+        print "</table>\n";
+    }
 }
 
 sub read_gene_info {
