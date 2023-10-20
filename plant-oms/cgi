@@ -156,13 +156,13 @@ if (%SAVED_REFSEQ) {
     }
     print "<h3>OrthoDB Results</h3>";
     print "Viridiplantae (green plants)\n";
-    my $sparql_orthodb_33090 = "";
+    my $sparql_orthodb = "";
     if ($ORGANISM1 eq "Arabidopsis thaliana") {
-        $sparql_orthodb_33090 = "$SPARQL_DIR/orthodb.rq 33090";
+        $sparql_orthodb = "$SPARQL_DIR/orthodb.rq";
     } elsif ($ORGANISM1 eq "Glycine max") {
-        $sparql_orthodb_33090 = "$SPARQL_DIR/orthodb2.rq 33090";
+        $sparql_orthodb = "$SPARQL_DIR/orthodb2.rq";
     }
-    my @orthodb_result = `$sparql_orthodb_33090 $GENE`;
+    my @orthodb_result = `$sparql_orthodb 33090 $GENE`;
     if (@orthodb_result) {
         print "<table border='1' style='font-size: 0.9em'>\n";
         print "<thead align='left' bgcolor='#e9faf9'>\n";
@@ -186,13 +186,7 @@ if (%SAVED_REFSEQ) {
         print "</table>\n";
     }
     print "<br>Embryophyta (land plants)\n";
-    my $sparql_orthodb_3193 = "";
-    if ($ORGANISM1 eq "Arabidopsis thaliana") {
-        $sparql_orthodb_3193 = "$SPARQL_DIR/orthodb.rq 3193";
-    } elsif ($ORGANISM1 eq "Glycine max") {
-        $sparql_orthodb_3193 = "$SPARQL_DIR/orthodb2.rq 3193";
-    }
-    my @orthodb_result = `$sparql_orthodb_3193 $GENE`;
+    my @orthodb_result = `$sparql_orthodb 3193 $GENE`;
     if (@orthodb_result) {
         print "<table border='1' style='font-size: 0.9em'>\n";
         print "<thead align='left' bgcolor='#e9faf9'>\n";
