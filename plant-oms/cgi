@@ -11,7 +11,7 @@ print "<link href='/cgi/css/style.css' rel='stylesheet'>\n";
 print "</head>\n";
 print "<body>\n";
 
-my $DIR = "/home/chiba/share/orth/plant";
+my $DIR = "/home/chiba/share/github/hchiba1/rois-ds-joint-tamura/plant-oms/data";
 my $SPARQL_DIR = "/home/chiba/share/github/hchiba1/rois-ds-joint-tamura/plant-oms/sparql";
 
 my $GENE = $ENV{PATH_INFO};
