@@ -1,7 +1,7 @@
 #!/usr/bin/env spang2
 # @endpoint plant
-# @param targetTaxon=3847
 # @param gene=815275
+# @param targetTaxon=3847
 # @option -a
 
 PREFIX taxid: <http://identifiers.org/taxonomy/>
