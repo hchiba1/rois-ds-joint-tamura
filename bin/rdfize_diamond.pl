@@ -10,13 +10,13 @@ my $USAGE=
 my %OPT;
 getopts('', \%OPT);
 
-### Check arguments
 if (!@ARGV) {
     print STDERR $USAGE;
     exit 1;
 }
 my ($FILE) = @ARGV;
 
+### Read TSV ###
 my $TARGET_TAXON;
 if ($FILE =~ /^\d+\-(\d+)_geneid.tsv$/) {
     $TARGET_TAXON = $1;
@@ -24,7 +24,6 @@ if ($FILE =~ /^\d+\-(\d+)_geneid.tsv$/) {
     die "$PROGRAM: unknown file format: $FILE\n";
 }
 
-### Read
 my %MAX_SCORE;
 open(FH, $FILE) or die "$PROGRAM: cannot open $FILE: $!\n";
 while (<FH>) {
@@ -46,7 +45,7 @@ while (<FH>) {
 }
 close FH;
 
-### Output
+### Create RDF ###
 print "\@prefix : <https://plant-oms.dbcls.jp/ontology#> .\n";
 print "\@prefix taxid: <http://identifiers.org/taxonomy/> .\n";
 print "\@prefix ncbigene: <http://identifiers.org/ncbigene/> .\n";
