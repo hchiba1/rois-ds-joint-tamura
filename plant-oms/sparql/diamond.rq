@@ -1,0 +1,18 @@
+#!/usr/bin/env spang2
+# @endpoint plant
+# @param targetTaxon=3847
+# @param gene=815275
+# @option -a
+
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+PREFIX ncbigene: <http://identifiers.org/ncbigene/>
+PREFIX plant: <https://plant-oms.dbcls.jp/ontology#>
+
+SELECT ?gene ?score
+WHERE {
+  ?s plant:targetTaxon taxid:${targetTaxon} ;
+     plant:queryGene ncbigene:${gene} ;
+     plant:targetGene ?gene ;
+     plant:score ?score .
+}
+ORDER BY DESC(?score)
