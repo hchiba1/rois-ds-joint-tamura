@@ -1,6 +1,6 @@
-#!/usr/bin/env spang2
-# @endpoint plant
-# @param gene=815275
+#!/home/chiba/.npm-global/bin/spang2
+# @endpoint https://orth.dbcls.jp/sparql-plant
+# @param queryGene=815275
 # @param targetTaxon=3847
 # @option -a
 
@@ -10,9 +10,9 @@ PREFIX plant: <https://plant-oms.dbcls.jp/ontology#>
 
 SELECT ?gene ?score
 WHERE {
-  ?s plant:targetTaxon taxid:${targetTaxon} ;
-     plant:queryGene ncbigene:${gene} ;
-     plant:targetGene ?gene ;
-     plant:score ?score .
+  ?hit plant:queryGene ncbigene:${queryGene} ;
+       plant:targetTaxon taxid:${targetTaxon} ;
+       plant:targetGene ?gene ;
+       plant:score ?score .
 }
 ORDER BY DESC(?score)
