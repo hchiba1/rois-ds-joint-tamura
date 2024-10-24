@@ -1,0 +1,25 @@
+#!/home/chiba/.npm-global/bin/spang2
+# @endpoint https://orth.dbcls.jp/sparql-plant
+# @param queryGene=815275
+# @param targetTaxon=3847
+# @param taxRange=33090
+# @option -a
+
+# 33090: Viridiplantae (green plants)
+# 3193: Embryophyta (land plants)
+
+PREFIX orthodb: <http://purl.orthodb.org/>
+PREFIX upTax: <http://purl.uniprot.org/taxonomy/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+
+SELECT DISTINCT ?gene
+WHERE {
+  ?group orthodb:ogBuiltAt upTax:${taxRange} ;
+         orthodb:hasMember/rdfs:seeAlso ncbigene:${queryGene} ;
+         orthodb:hasMember ?odb_gene_id .
+  ?odb_gene_id rdfs:seeAlso ?gene ;
+         up:organism upTax:${targetTaxon} .
+}
+ORDER BY ?gene
